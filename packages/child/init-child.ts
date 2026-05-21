@@ -14,33 +14,47 @@ export function setupEventListeners() {}
 
 export function setupMouseEvents() {}
 
+function calcMaxSize() {
+  const doc = document.documentElement
+  const body = document.body
+
+  const height = Math.ceil(
+    Math.max(
+      doc.scrollHeight,
+      doc.offsetHeight,
+      doc.clientHeight,
+      doc.getBoundingClientRect().bottom,
+      body?.scrollHeight ?? 0,
+      body?.offsetHeight ?? 0,
+      body?.clientHeight ?? 0,
+      body?.getBoundingClientRect().bottom ?? 0,
+      1,
+    ),
+  )
+
+  const width = Math.ceil(
+    Math.max(
+      doc.scrollWidth,
+      doc.offsetWidth,
+      doc.clientWidth,
+      doc.getBoundingClientRect().right,
+      body?.scrollWidth ?? 0,
+      body?.offsetWidth ?? 0,
+      body?.clientWidth ?? 0,
+      body?.getBoundingClientRect().right ?? 0,
+      1,
+    ),
+  )
+
+  return { height, width }
+}
+
 export function sendSize(state: State) {
   const id = state.iframeId ?? "unknown";
   const target = state.parentWindow ?? window.parent;
   if (!target) return;
 
-  const doc = document.documentElement;
-  const body = document.body;
-
-  const height = Math.max(
-    doc.scrollHeight,
-    doc.offsetHeight,
-    doc.clientHeight,
-    body?.scrollHeight ?? 0,
-    body?.offsetHeight ?? 0,
-    body?.clientHeight ?? 0,
-    1,
-  );
-
-  const width = Math.max(
-    doc.scrollWidth,
-    doc.offsetWidth,
-    doc.clientWidth,
-    body?.scrollWidth ?? 0,
-    body?.offsetWidth ?? 0,
-    body?.clientWidth ?? 0,
-    1,
-  );
+  const { height, width } = calcMaxSize()
 
   const targetOrigin =
     state.parentOrigin && state.parentOrigin !== "null"
