@@ -9,7 +9,7 @@
     "build:child": "tsup packages/child/index.ts --format esm --dts --outDir dist/child",
     "clean": "rimraf dist",
     "lint": "pnpm run typecheck",
-    "serve:examples": "pnpm run build && echo \"iframe-fit examples: http://localhost:8090/examples/basic/index.html\" && http-server . -p 8090 --cors -c-1 --silent",
+    "serve:examples": "pnpm run build && echo \"iframe-fit examples:\" && echo \"- http://localhost:8090/examples/index.html\" && http-server . -p 8090 --cors -c-1 --silent",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests"
   },

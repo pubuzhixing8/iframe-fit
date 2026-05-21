@@ -14,6 +14,16 @@ export function setupEventListeners() {}
 
 export function setupMouseEvents() {}
 
+function stopInfiniteResizingOfIframe() {
+  const setAutoHeight = (el: HTMLElement | null) => {
+    if (!el) return
+    el.style.setProperty('height', 'auto', 'important')
+  }
+
+  setAutoHeight(document.documentElement)
+  setAutoHeight(document.body)
+}
+
 function calcMaxSize() {
   const doc = document.documentElement
   const body = document.body
@@ -22,12 +32,8 @@ function calcMaxSize() {
     Math.max(
       doc.scrollHeight,
       doc.offsetHeight,
-      doc.clientHeight,
-      doc.getBoundingClientRect().bottom,
       body?.scrollHeight ?? 0,
       body?.offsetHeight ?? 0,
-      body?.clientHeight ?? 0,
-      body?.getBoundingClientRect().bottom ?? 0,
       1,
     ),
   )
@@ -36,12 +42,8 @@ function calcMaxSize() {
     Math.max(
       doc.scrollWidth,
       doc.offsetWidth,
-      doc.clientWidth,
-      doc.getBoundingClientRect().right,
       body?.scrollWidth ?? 0,
       body?.offsetWidth ?? 0,
-      body?.clientWidth ?? 0,
-      body?.getBoundingClientRect().right ?? 0,
       1,
     ),
   )
@@ -76,6 +78,7 @@ export function sendSize(state: State) {
 
 export function initChild(state: State) {
   console.log('[iframe-fit][child] initChild', { iframeId: state.iframeId })
+  stopInfiniteResizingOfIframe()
   let taggedElements: NodeListOf<Element> = document.querySelectorAll(
     `[${SIZE_ATTR}]`,
   );

@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      a.toggle {
+        float: right;
+        margin-left: 8px;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100vh;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="#" id="toggle" class="toggle">Toggle iFrame</a>
+    <h2>Auto resizing iFrame</h2>
+    <p>
+      Resize window or click one of the links in the iFrame to watch it resize.
+      Or try with <a name="anchorParentTest" href="two.html">two iFrames</a>.
+    </p>
+
+    <div id="iframeContainer" style="padding: 20px">
+      <iframe src="child/frame.content.html" scrolling="no"></iframe>
+    </div>
+
+    <script type="module">
+      import { iframeFit } from "../../../../../../../dist/parent/index.mjs"
+
+      const iframe = document.querySelector('#iframeContainer iframe')
+      iframeFit(iframe)
+
+      function toggle(event) {
+        event.preventDefault()
+        const first = document.querySelectorAll('iframe')[0]
+        first.style.display = first.style.display === 'none' ? 'block' : 'none'
+      }
+
+      document.getElementById('toggle').addEventListener('click', toggle)
+    </script>
+  </body>
+</html>

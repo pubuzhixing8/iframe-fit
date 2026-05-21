@@ -108,7 +108,7 @@ function setSize(id: string, payload: ResizePayload) {
 
   const height = Number(payload?.height)
   const width = Number(payload?.width)
-  if (!Number.isFinite(height) || !Number.isFinite(width)) {
+  if (!Number.isFinite(height)) {
     console.log('[iframe-fit][parent] setSize ignored - invalid size', {
       id,
       payload,
@@ -118,7 +118,6 @@ function setSize(id: string, payload: ResizePayload) {
 
   console.log('[iframe-fit][parent] setSize', { id, height, width })
   entry.iframe.style.height = `${height}px`
-  entry.iframe.style.width = `${width}px`
 }
 
 export function registerChildIframe(iframe: HTMLIFrameElement): IframeFitRef {
