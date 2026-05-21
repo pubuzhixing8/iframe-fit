@@ -1,3 +1,8 @@
+import {
+  MessageType,
+  type ResizePayload,
+} from "../common/index";
+import { sendToParent } from './send-to-parent'
 import { IGNORE_ATTR, OVERFLOW_ATTR, SIZE_ATTR } from "./dom-attrs";
 import {
   createMutationObserver,
@@ -9,7 +14,47 @@ export function setupEventListeners() {}
 
 export function setupMouseEvents() {}
 
-export function sendSize() {}
+export function sendSize(state: State) {
+  const id = state.iframeId ?? "unknown";
+  const target = state.parentWindow ?? window.parent;
+  if (!target) return;
+
+  const doc = document.documentElement;
+  const body = document.body;
+
+  const height = Math.max(
+    doc.scrollHeight,
+    doc.offsetHeight,
+    doc.clientHeight,
+    body?.scrollHeight ?? 0,
+    body?.offsetHeight ?? 0,
+    body?.clientHeight ?? 0,
+    1,
+  );
+
+  const width = Math.max(
+    doc.scrollWidth,
+    doc.offsetWidth,
+    doc.clientWidth,
+    body?.scrollWidth ?? 0,
+    body?.offsetWidth ?? 0,
+    body?.clientWidth ?? 0,
+    1,
+  );
+
+  const targetOrigin =
+    state.parentOrigin && state.parentOrigin !== "null" ? state.parentOrigin : "*";
+
+  sendToParent<ResizePayload>({
+    message: {
+      id,
+      type: MessageType.RESIZE,
+      payload: { height, width },
+    },
+    target,
+    targetOrigin,
+  })
+}
 
 export function initChild(state: State) {
   let taggedElements: NodeListOf<Element> = document.querySelectorAll(
@@ -80,7 +125,7 @@ export function initChild(state: State) {
 
   const mutationObserved = (payload: MutationObservedPayload) => {
     contentMutated(payload);
-    sendSize();
+    sendSize(state);
   };
 
   const attachObservers = () => {
@@ -91,5 +136,5 @@ export function initChild(state: State) {
   attachObservers();
   setupEventListeners();
   setupMouseEvents();
-  sendSize();
+  sendSize(state);
 }

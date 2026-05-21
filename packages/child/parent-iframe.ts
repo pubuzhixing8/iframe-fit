@@ -1,5 +1,6 @@
-import { MessageType, PROTOCOL_VERSION, encodeMessage, createIframeId } from '../common/index'
+import { MessageType, createIframeId } from '../common/index'
 import type { MessageType as MessageKind } from '../common/index'
+import { sendToParent } from './send-to-parent'
 
 export interface ParentIframe {
   resize(): void
@@ -23,33 +24,28 @@ declare global {
 export function setupParentIframeHandle(): ParentIframe {
   const id = createIframeId('child')
 
-  const send = (type: MessageKind, payload: unknown, targetOrigin = '*') => {
-    window.parent?.postMessage(
-      encodeMessage({
-        id,
-        type,
-        payload,
-        version: PROTOCOL_VERSION,
-      }),
-      targetOrigin,
-    )
-  }
-
   const api: ParentIframe = {
     resize() {
-      send(MessageType.RESIZE, { reason: 'manual' })
+      sendToParent({
+        message: { id, type: MessageType.RESIZE, payload: { reason: 'manual' } },
+      })
     },
     sendMessage(message, targetOrigin) {
-      send(MessageType.MESSAGE, message, targetOrigin)
+      sendToParent({
+        message: { id, type: MessageType.MESSAGE, payload: message },
+        targetOrigin,
+      })
     },
     autoResize(value) {
-      send(MessageType.AUTO_RESIZE, { value })
+      sendToParent({
+        message: { id, type: MessageType.AUTO_RESIZE, payload: { value } },
+      })
     },
     close() {
-      send(MessageType.CLOSE, null)
+      sendToParent({ message: { id, type: MessageType.CLOSE, payload: null } })
     },
     getParentProps(callback) {
-      send(MessageType.PARENT_INFO, null)
+      sendToParent({ message: { id, type: MessageType.PARENT_INFO, payload: null } })
       return () => callback(undefined)
     },
   }
