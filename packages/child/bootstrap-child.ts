@@ -13,6 +13,7 @@ import { State } from "./state";
 // start observers, then expose `window.parentIframe`. This bootstrap file marks
 // the seam where those responsibilities will be reintroduced step by step.
 export function bootstrapChild() {
+  console.log("[iframe-fit][child] bootstrapChild");
   if ("iframeChildListener" in window) {
     console.warn("Already setup");
   } else {
@@ -33,6 +34,7 @@ function received(event: MessageEvent, state: State) {
   const { data } = event;
   const messageData = decodeMessage(data);
   if (!messageData) return;
+  console.log("[iframe-fit][child] received message", messageData);
   if (messageData.type === MessageType.INIT) {
     processRequestFromParent.init(event, state);
     return;
@@ -57,5 +59,6 @@ function ready(state: State) {
 
 function sendReady(target: Window | null) {
   if (!target) return;
+  console.log("[iframe-fit][child] send CHILD_READY_MESSAGE");
   target.postMessage(CHILD_READY_MESSAGE, "*");
 }

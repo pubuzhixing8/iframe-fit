@@ -47,6 +47,8 @@ export function sendSize(state: State) {
       ? state.parentOrigin
       : "*"
 
+  console.log('[iframe-fit][child] sendSize', { id, height, width, targetOrigin })
+
   sendToParent<ResizePayload>({
     message: {
       id,
@@ -59,6 +61,7 @@ export function sendSize(state: State) {
 }
 
 export function initChild(state: State) {
+  console.log('[iframe-fit][child] initChild', { iframeId: state.iframeId })
   let taggedElements: NodeListOf<Element> = document.querySelectorAll(
     `[${SIZE_ATTR}]`,
   );
@@ -126,6 +129,10 @@ export function initChild(state: State) {
   };
 
   const mutationObserved = (payload: MutationObservedPayload) => {
+    console.log('[iframe-fit][child] mutationObserved', {
+      added: payload.addedNodes.size,
+      removed: payload.removedNodes.size,
+    })
     contentMutated(payload);
     sendSize(state);
   };
