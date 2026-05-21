@@ -11,11 +11,13 @@ import {
 type RegistryEntry = Readonly<{
   id: string
   iframe: HTMLIFrameElement
+  resizeWidth: boolean
 }>
 
 const registry = new Map<string, RegistryEntry>()
 
 const IFRAME_FIT_ID_ATTR = 'data-iframe-fit-id'
+const IFRAME_FIT_RESIZE_WIDTH_ATTR = 'data-iframe-fit-resize-width'
 
 function setupIframeRef(iframe: HTMLIFrameElement): IframeFitRef {
   return {
@@ -118,26 +120,33 @@ function setSize(id: string, payload: ResizePayload) {
 
   console.log('[iframe-fit][parent] setSize', { id, height, width })
   entry.iframe.style.height = `${height}px`
+  if (entry.resizeWidth && Number.isFinite(width) && width > 0) {
+    entry.iframe.style.width = `${width}px`
+  }
 }
 
 export function registerChildIframe(iframe: HTMLIFrameElement): IframeFitRef {
   const id = iframe.getAttribute(IFRAME_FIT_ID_ATTR) || createIframeId()
   iframe.setAttribute(IFRAME_FIT_ID_ATTR, id)
+  const resizeWidth =
+    iframe.getAttribute(IFRAME_FIT_RESIZE_WIDTH_ATTR) === 'true'
+  const entry = { id, iframe, resizeWidth } as const
   window.addEventListener(MESSAGE_EVENT, iframeListener)
-  registry.set(id, { id, iframe })
+  registry.set(id, entry)
   console.log('[iframe-fit][parent] register iframe', {
     id,
     domId: iframe.id,
     src: iframe.src,
+    resizeWidth,
   })
   if (
     iframe.contentWindow &&
     iframe.contentDocument &&
     iframe.contentDocument.readyState === 'complete'
   ) {
-    sendInit({ id, iframe })
+    sendInit(entry)
   } else {
-    iframe.addEventListener('load', () => sendInit({ id, iframe }), {
+    iframe.addEventListener('load', () => sendInit(entry), {
       once: true,
     })
   }

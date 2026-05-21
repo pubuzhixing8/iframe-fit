@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Iframe-Resizer Examples</title>
+    <title>iframe-fit demo</title>
     <meta name="description" content="iFrame message passing test" />
     <meta name="viewport" content="width=device-width" />
     <style>
@@ -25,14 +25,10 @@
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     ></script>
-    <script
-      type="text/javascript"
-      src="../../js-dist/iframe-resizer.parent.js"
-    ></script>
   </head>
 
   <body>
-    <h2>Automagically resizing iFrame</h2>
+    <h2>Auto resizing iFrame</h2>
     <p>
       Resize window or click one of the links in the iFrame to watch it resize.
       Or try with <a name="anchorParentTest" href="two.html">two iFrames</a>.
@@ -47,63 +43,14 @@
     
     <p id="callback"></p>
     <div style="margin: 8px 0 0 24px; font-size: 13px">
-      For details on how this works, see
-      <a href="https://iframe-resizer.com">https://frame-resizer.com</a>.
+      For details on how this works, see <a href="../README.md">README</a>.
     </div>
 
-    <script type="text/javascript">
-      /*
-       * If you do not understand what the code below does, then please just use the
-       * following call in your own code.
-       *
-       *   iframeResize({ license: 'YOUR-LICENSE' })
-       *
-       */
+    <script type="module">
+      import { iframeFit } from '../dist/parent/index.mjs'
 
-      const callbackDisplay = document.querySelector('p#callback')
-
-      const iframes = iframeResize({
-        inPageLinks: true,
-        license: 'GPLv3',
-        log: true,
-        waitForLoad: true,
-
-        onResized(messageData) {
-          // Callback fn when resize is received
-          callbackDisplay.innerHTML = 
-          `<b>Frame ID:</b> ${messageData.iframe.id} <br><b>Height:</b> ${messageData.height} <br><b>Width:</b> ${messageData.width} <br><b>Event type:</b> ${messageData.type}`
-        },
-
-        onMouseEnter(messageData) {
-          // Callback fn when mouse enters iframe
-          callbackDisplay.innerHTML = `<b>Frame ID:</b> ${messageData.iframe.id} <br><b>ScreenX:</b> ${messageData.screenX} <br><b>ScreenY:</b> ${messageData.screenY} <br><b>Event type:</b> ${messageData.type}`
-        },
-
-        onMouseLeave(messageData) {
-          // Callback fn when mouse enters iframe
-          callbackDisplay.innerHTML = `<b>Frame ID:</b> ${messageData.iframe.id} <br><b>ScreenX:</b> ${messageData.screenX} <br><b>ScreenY:</b> ${messageData.screenY} <br><b>Event type:</b> ${messageData.type}`
-        },
-
-        onMessage(messageData) {
-          // Callback fn when message is received
-          callbackDisplay.innerHTML = `<b>Frame ID:</b> ${messageData.iframe.id} <br><b>Message:</b> ${messageData.message}`
-          alert(messageData.message)
-          messageData.iframe.iframeResizer.sendMessage(
-            'Hello back from parent page',
-          )
-        },
-
-        onAfterClose(id) {
-          // Callback fn when iFrame is closed
-          callbackDisplay.innerHTML = `<b>Iframe (</b>${id}<b>) removed from page.</b>`
-        },
-
-        onScroll(messageData) {
-          // Callback fn when iframe is scrolled
-          callbackDisplay.innerHTML = `<b>Iframe ID:</b> ${messageData.iframe.id} <br><b>Top:</b> ${messageData.top} <br><b>Left:</b> ${messageData.left}`
-        },
-      })
-      
+      const iframe = document.querySelector('#iframeContainer iframe')
+      iframeFit(iframe)
     </script>
   </body>
 </html>

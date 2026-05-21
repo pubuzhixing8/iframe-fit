@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>iFrame :hover example</title>
-    <meta name="description" content="iFrame :hover example" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
       a {
@@ -25,11 +25,6 @@
 	  	<!--  #code  -->
 	  </xmp>
 
-    <script
-      type="text/javascript"
-      src="../../../js-dist/iframe-resizer.child.js"
-    ></script>
-
     <div id="code">
       <style>
         xmp {
@@ -47,6 +42,11 @@
     <script>
       document.getElementsByTagName('xmp')[0].textContent =
         document.getElementById('code').innerHTML
+    </script>
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
+
+      bootstrapChild()
     </script>
   </body>
 </html>

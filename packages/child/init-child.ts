@@ -3,7 +3,7 @@ import {
   type ResizePayload,
 } from "../common/index";
 import { sendToParent } from './send-to-parent'
-import { IGNORE_ATTR, OVERFLOW_ATTR, SIZE_ATTR } from "./dom-attrs";
+import { IGNORE_ATTR, IGNORE_TAGS, OVERFLOW_ATTR, SIZE_ATTR } from "./dom-attrs";
 import {
   createMutationObserver,
   type MutationObservedPayload,
@@ -25,28 +25,29 @@ function stopInfiniteResizingOfIframe() {
 }
 
 function calcMaxSize() {
-  const doc = document.documentElement
-  const body = document.body
+  const elements = document.documentElement.querySelectorAll('*')
 
-  const height = Math.ceil(
-    Math.max(
-      doc.scrollHeight,
-      doc.offsetHeight,
-      body?.scrollHeight ?? 0,
-      body?.offsetHeight ?? 0,
-      1,
-    ),
-  )
+  let maxBottom = 0
+  let maxRight = 0
 
-  const width = Math.ceil(
-    Math.max(
-      doc.scrollWidth,
-      doc.offsetWidth,
-      body?.scrollWidth ?? 0,
-      body?.offsetWidth ?? 0,
-      1,
-    ),
-  )
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i]
+    const tagName = element.tagName.toLowerCase()
+    if (IGNORE_TAGS.has(tagName)) continue
+    if (element.closest(`[${IGNORE_ATTR}]`)) continue
+
+    const rect = element.getBoundingClientRect()
+    const style = getComputedStyle(element)
+
+    const bottom = rect.bottom + parseFloat(style.marginBottom || '0')
+    if (bottom > maxBottom) maxBottom = bottom
+
+    const right = rect.right + parseFloat(style.marginRight || '0')
+    if (right > maxRight) maxRight = right
+  }
+
+  const height = Math.ceil(Math.max(maxBottom, 1))
+  const width = Math.ceil(Math.max(maxRight, 1))
 
   return { height, width }
 }

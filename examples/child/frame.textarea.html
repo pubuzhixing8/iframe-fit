@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>iFrame textarea resizing example</title>
-    <meta name="description" content="iFrame textarea resizing example" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
       a {
@@ -33,7 +33,11 @@
 
     <textarea id="textArea">Resize me</textarea>
 
-    <script src="../../../js-dist/iframe-resizer.child.js"></script>
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
+
+      bootstrapChild()
+    </script>
 
   </body>
 </html>

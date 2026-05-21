@@ -2,29 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Iframe-Resizer Test Content</title>
-    <meta name="description" content="iframe-resizer examples" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <script
-      type="text/javascript"
-      src="../../../js-dist/iframe-resizer.child.js"
-    ></script>
-    <!-- <script
-      type="text/javascript"
-      src="../../dist/legacy/js/iframeResizer.contentWindow.js"
-    ></script> -->
     <script>
       function toggle() {
         const { style } = document.getElementsByTagName('p')[1]
         style.display = style.display === 'none' ? '' : 'none'
         return false
-      }
-    </script>
-    <script>
-      window.iframeResizer = {
-        onMessage(message) {
-          alert(message, parentIFrame.getId())
-        },
       }
     </script>
     <script>
@@ -40,12 +25,11 @@
         style.position = 'absolute'
         style.top = `${document.body.scrollHeight - 10}px`
         
-        div.innerContent = 'Overflowing content'
+        div.textContent = 'Overflowing content'
         document.body.lastChild.append(div)
         return false
       }
     </script>
-    <!-- html/body height is set to test that iframe-resizer can over ride this value and set it back to 'auto' -->
     <style>
       html,
       body {
@@ -167,6 +151,11 @@
       document
         .getElementById('nested')
         .setAttribute('href', `frame.nested.html?${++level}`)
+    </script>
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
+
+      bootstrapChild()
     </script>
   </body>
 </html>

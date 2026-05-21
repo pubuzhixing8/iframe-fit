@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>iFrame animate example</title>
-    <meta name="description" content="iFrame message passing test" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
@@ -87,11 +87,6 @@
 
     <span id="insert"></span>
 
-    <!-- 
-      The data-iframe-size attribute tells iframe-resizer to use this element
-      to calculate the height of the iframe, when the content overflows the
-      <body> element.     
-    -->
     <div id="abs">
       <p>
         This is an absolute positioned element that will animate to 
@@ -100,7 +95,6 @@
     </div>
 
     <script>
-      // Add some content to to show the effect of using data-iframe-size above
       for (let i = 0; i < 500; i++) {
         const span = document.createElement('span')
         span.style.setProperty('position', 'relative')
@@ -140,10 +134,10 @@
 }
     </script>
 
-    <script
-      type="text/javascript"
-      src="../../../js-dist/iframe-resizer.child.js"
-    ></script>
-    
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
+
+      bootstrapChild()
+    </script>
   </body>
 </html>

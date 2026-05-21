@@ -19,7 +19,7 @@ export function createMutationObserver(
 
   const config: MutationObserverInit = {
     attributes: true,
-    attributeFilter: [IGNORE_ATTR, SIZE_ATTR],
+    attributeFilter: [IGNORE_ATTR, SIZE_ATTR, 'style', 'class'],
     attributeOldValue: false,
     characterData: false,
     characterDataOldValue: false,

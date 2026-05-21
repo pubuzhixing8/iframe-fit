@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>iFrame message passing test</title>
-    <meta name="description" content="iFrame message passing test" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
@@ -123,11 +123,6 @@
       >
     </div>
 
-    <script
-      type="text/javascript"
-      src="../../../js-dist/iframe-resizer.child.js"
-    ></script>
-
     <script>
       document
         .getElementById('heightCalculationMethod')
@@ -140,6 +135,11 @@
             parentIFrame.resize()
           }
         })
+    </script>
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
+
+      bootstrapChild()
     </script>
   </body>
 </html>

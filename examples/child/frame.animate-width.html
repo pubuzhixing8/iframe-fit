@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>iFrame message passing test</title>
-    <meta name="description" content="iFrame message passing test" />
+    <title>iframe-fit demo</title>
+    <meta name="description" content="iframe-fit demo content" />
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
@@ -87,31 +87,16 @@
   <body>
     <b>Animated Width iFrame</b>
 
-    <!-- 
-      The data-iframe-size attribute tells iframe-resizer to use this element
-      to calculate the height of the iframe, when the content overflows the
-      <body> element.     
-    -->
-
     <div id="bar"></div>
 
     <div id="abs">
       <p>This element will animate to a width of 800px using CSS keyframes.</p>
     </div>
+    <script type="module">
+      import { bootstrapChild } from '../../dist/child/index.mjs'
 
-    <!-- script>
-      // Add some content to to show the effect of using data-iframe-size above
-      for (var i = 0; i < 10000; i++) {
-        document.write(
-          '<div style="position: absolute">This is a test to see if the page will grow to accommodate the content.</div>'
-        );
-      }
-      
-    </script -->
-
-    <script
-      type="text/javascript"
-      src="../../../js-dist/iframe-resizer.child.js"
-    ></script>
+      bootstrapChild()
+    </script>
+    </script>
   </body>
 </html>
