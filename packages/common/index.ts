@@ -1,6 +1,7 @@
 export * from './protocol/constants'
 export * from './protocol/message-types'
 export * from './protocol/types'
+export * from './protocol/payloads'
 export * from './protocol/encode'
 export * from './protocol/decode'
 export * from './types/options'
