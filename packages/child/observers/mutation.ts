@@ -1,36 +1,16 @@
-const IGNORE_ATTR = 'data-iframe-ignore' as const
-const SIZE_ATTR = 'data-iframe-size' as const
-
-const IGNORE_TAGS = new Set([
-  'head',
-  'body',
-  'meta',
-  'base',
-  'title',
-  'script',
-  'link',
-  'style',
-  'map',
-  'area',
-  'option',
-  'optgroup',
-  'template',
-  'track',
-  'wbr',
-  'nobr',
-])
+import { IGNORE_ATTR, IGNORE_TAGS, SIZE_ATTR } from '../dom-attrs'
 
 const DELAY = 16
 const DELAY_MARGIN = 2
 const DELAY_MAX = 200
 
-type MutationCallbackPayload = Readonly<{
+export type MutationObservedPayload = Readonly<{
   addedNodes: ReadonlySet<Element>
   removedNodes: ReadonlySet<Element>
 }>
 
 export function createMutationObserver(
-  callback: (payload: MutationCallbackPayload) => void,
+  callback: (payload: MutationObservedPayload) => void,
 ) {
   const addedNodes = new Set<Element>()
   const removedNodes = new Set<Element>()
