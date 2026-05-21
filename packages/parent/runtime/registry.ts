@@ -1,4 +1,4 @@
-import type { IframeFitRef, Envelope, InitPayload } from '../../common/index'
+import type { IframeFitRef, Envelope, InitPayload, ResizePayload } from '../../common/index'
 import {
   CHILD_READY_MESSAGE,
   createIframeId,
@@ -55,11 +55,12 @@ function iframeListener(event: MessageEvent) {
 }
 
 function messageHandler(messageData: Envelope<unknown>) {
-  const { type } = messageData
+  const { type, id } = messageData
   switch (type) {
     case MessageType.INIT:
       break
     case MessageType.RESIZE:
+      setSize(id, messageData.payload as ResizePayload)
       break
     case MessageType.CLOSE:
       break
@@ -76,6 +77,18 @@ function messageHandler(messageData: Envelope<unknown>) {
     default:
       break
   }
+}
+
+function setSize(id: string, payload: ResizePayload) {
+  const entry = registry.get(id)
+  if (!entry) return
+
+  const height = Number(payload?.height)
+  const width = Number(payload?.width)
+  if (!Number.isFinite(height) || !Number.isFinite(width)) return
+
+  entry.iframe.style.height = `${height}px`
+  entry.iframe.style.width = `${width}px`
 }
 
 export function registerChildIframe(iframe: HTMLIFrameElement): IframeFitRef {
