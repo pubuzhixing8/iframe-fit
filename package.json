@@ -1,0 +1,22 @@
+{
+  "name": "iframe-fit",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.2.0",
+  "scripts": {
+    "build": "pnpm run clean && pnpm run build:parent && pnpm run build:child",
+    "build:parent": "tsup packages/parent/index.ts --format esm --dts --outDir dist/parent",
+    "build:child": "tsup packages/child/index.ts --format esm --dts --outDir dist/child",
+    "clean": "rimraf dist",
+    "lint": "pnpm run typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
