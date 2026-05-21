@@ -43,7 +43,9 @@ export function sendSize(state: State) {
   );
 
   const targetOrigin =
-    state.parentOrigin && state.parentOrigin !== "null" ? state.parentOrigin : "*";
+    state.parentOrigin && state.parentOrigin !== "null"
+      ? state.parentOrigin
+      : "*"
 
   sendToParent<ResizePayload>({
     message: {

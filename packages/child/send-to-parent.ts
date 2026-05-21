@@ -16,4 +16,3 @@ export function sendToParent<TPayload>({
   if (!win) return
   win.postMessage(encodeMessage(message), targetOrigin ?? '*')
 }
-

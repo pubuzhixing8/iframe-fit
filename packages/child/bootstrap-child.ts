@@ -56,5 +56,6 @@ function ready(state: State) {
 }
 
 function sendReady(target: Window | null) {
-  // target.postMessage(CHILD_READY_MESSAGE, window?.iframeFit?.targetOrigin || "*");
+  if (!target) return;
+  target.postMessage(CHILD_READY_MESSAGE, "*");
 }
