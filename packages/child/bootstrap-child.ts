@@ -19,6 +19,7 @@ export function bootstrapChild() {
     const state: State = {
       sent: false,
       firstRun: true,
+      teardown: [],
     };
     window.iframeChildListener = (data) => {};
     window.addEventListener(MESSAGE_EVENT, (event) => received(event, state));
