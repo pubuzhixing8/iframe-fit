@@ -16,4 +16,5 @@ export interface IframeResizeOptions {
   autoResize?: boolean
   checkOrigin?: boolean | string[]
   heightCalculationMethod?: HeightCalculationMethod
+  log?: boolean
 }

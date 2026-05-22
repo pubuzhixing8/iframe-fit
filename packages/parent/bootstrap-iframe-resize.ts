@@ -1,4 +1,5 @@
-import type { IframeResizeHandle } from '../common/index'
+import type { IframeResizeHandle, IframeResizeOptions } from '../common/index'
+import { normalizeOptions } from './normalize-options'
 import { registerChildIframe } from './runtime/registry'
 
 export type IframeResizeTarget = HTMLIFrameElement
@@ -13,11 +14,12 @@ export interface IframeResizeElement extends HTMLIFrameElement {
 // `connectResizer(options)`.
 export function bootstrapIframeResize(
   target: IframeResizeTarget,
+  options: IframeResizeOptions = {},
 ): IframeResizeElement {
   // `registerChildIframe()` is the new shell around the old `connectResizer(options)(iframe)`
   // path. Today it only records normalized state and attaches the public parent API.
   // Later this is where the real legacy/runtime bridge should be connected.
-  const iframeResizeHandle = registerChildIframe(target)
+  const iframeResizeHandle = registerChildIframe(target, normalizeOptions(options))
   const resizeIframe = target as IframeResizeElement
   resizeIframe.iframeResizeHandle = iframeResizeHandle
   return resizeIframe

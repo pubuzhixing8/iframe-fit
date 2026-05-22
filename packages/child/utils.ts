@@ -1,5 +1,13 @@
 import { encodeMessage } from '../common/index'
 import type { Envelope } from '../common/index'
+import { createLogger } from '../common/index'
+import type { Logger, LoggerState } from '../common/index'
+
+export const childLoggerState: LoggerState = { enabled: false }
+export const childLogger: Logger = createLogger({
+  state: childLoggerState,
+  role: 'child',
+})
 
 export type State = {
   sentReady: boolean
@@ -29,4 +37,3 @@ export function sendToParent<TPayload>({
 export const check = (state: State) => {
   return state.firstRun
 }
-

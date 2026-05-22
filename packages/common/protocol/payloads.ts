@@ -1,4 +1,6 @@
-export type InitPayload = Readonly<Record<string, never>>
+export type InitPayload = Readonly<{
+  logEnabled?: boolean
+}>
 
 export type ResizePayload = Readonly<{
   height: number

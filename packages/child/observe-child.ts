@@ -1,5 +1,5 @@
 import { MessageType, type ResizePayload } from '../common/index'
-import { sendToParent } from './utils'
+import { childLogger, sendToParent } from './utils'
 import { IGNORE_ATTR, IGNORE_TAGS, OVERFLOW_ATTR, SIZE_ATTR } from './constant'
 import {
   createMutationObserver,
@@ -61,7 +61,7 @@ export function sendSize(state: State) {
       ? state.parentOrigin
       : '*'
 
-  console.log('[iframe-resize][child] sendSize', {
+  childLogger.debug('sendSize', {
     id,
     height,
     width,
@@ -80,7 +80,7 @@ export function sendSize(state: State) {
 }
 
 export function observeChild(state: State) {
-  console.log('[iframe-resize][child] observeChild', {
+  childLogger.debug('observeChild', {
     iframeId: state.iframeId,
   })
   stopInfiniteResizingOfIframe()
@@ -154,7 +154,7 @@ export function observeChild(state: State) {
   }
 
   const mutationObserved = (payload: MutationObservedPayload) => {
-    console.log('[iframe-resize][child] mutationObserved', {
+    childLogger.debug('mutationObserved', {
       added: payload.addedNodes.size,
       removed: payload.removedNodes.size,
     })

@@ -6,6 +6,7 @@ export function normalizeIframeResizeOptions(
   return {
     autoResize: options.autoResize ?? true,
     checkOrigin: options.checkOrigin ?? true,
-    heightCalculationMethod: options.heightCalculationMethod ?? 'auto'
+    heightCalculationMethod: options.heightCalculationMethod ?? 'auto',
+    log: options.log ?? false,
   }
 }

@@ -2,10 +2,13 @@ import type {
   Envelope,
   IframeResizeHandle,
   InitPayload,
+  IframeResizeOptions,
+  LoggerState,
   ResizePayload,
 } from '../../common/index'
 import {
   CHILD_READY_MESSAGE,
+  createLogger,
   createIframeId,
   decodeMessage,
   encodeMessage,
@@ -17,12 +20,16 @@ type RegistryEntry = Readonly<{
   id: string
   iframe: HTMLIFrameElement
   resizeWidth: boolean
+  logEnabled: boolean
 }>
 
 const registry = new Map<string, RegistryEntry>()
 
 const IFRAME_RESIZE_ID_ATTR = 'data-iframe-resize-id'
 const IFRAME_RESIZE_RESIZE_WIDTH_ATTR = 'data-iframe-resize-width'
+
+const parentLoggerState: LoggerState = { enabled: false }
+const parentLogger = createLogger({ state: parentLoggerState, role: 'parent' })
 
 function buildIframeHandle(iframe: HTMLIFrameElement): IframeResizeHandle {
   return {
@@ -39,7 +46,7 @@ function buildIframeHandle(iframe: HTMLIFrameElement): IframeResizeHandle {
 }
 
 function sendInit(entry: RegistryEntry) {
-  console.log('[iframe-resize][parent] send INIT', {
+  parentLogger.info('send INIT', {
     id: entry.id,
     domId: entry.iframe.id,
     src: entry.iframe.src,
@@ -48,7 +55,7 @@ function sendInit(entry: RegistryEntry) {
     encodeMessage<InitPayload>({
       id: entry.id,
       type: MessageType.init,
-      payload: {},
+      payload: { logEnabled: entry.logEnabled },
     }),
     '*',
   )
@@ -57,12 +64,12 @@ function sendInit(entry: RegistryEntry) {
 function iframeListener(event: MessageEvent) {
   let message = event.data
   if (message === CHILD_READY_MESSAGE) {
-    console.log('[iframe-resize][parent] received CHILD_READY_MESSAGE')
+    parentLogger.debug('received CHILD_READY_MESSAGE')
     // child iframe is ready in case child is not ready when parent is initialized
     if (typeof event.source !== 'object' || event.source == null) return
     registry.forEach((entry) => {
       if (entry.iframe.contentWindow === event.source) {
-        console.log('[iframe-resize][parent] child ready matched iframe', {
+        parentLogger.debug('child ready matched iframe', {
           id: entry.id,
           domId: entry.iframe.id,
           src: entry.iframe.src,
@@ -72,9 +79,9 @@ function iframeListener(event: MessageEvent) {
     })
     return
   }
-  const messageData = decodeMessage(message)
+  const messageData = decodeMessage(message, parentLogger)
   if (!messageData) return
-  console.log('[iframe-resize][parent] received message', messageData)
+  parentLogger.debug('received message', messageData)
   messageHandler(messageData)
 }
 
@@ -106,7 +113,7 @@ function messageHandler(messageData: Envelope<unknown>) {
 function setSize(id: string, payload: ResizePayload) {
   const entry = registry.get(id)
   if (!entry) {
-    console.log('[iframe-resize][parent] setSize ignored - unknown iframe id', {
+    parentLogger.debug('setSize ignored - unknown iframe id', {
       id,
       payload,
     })
@@ -116,14 +123,14 @@ function setSize(id: string, payload: ResizePayload) {
   const height = Number(payload?.height)
   const width = Number(payload?.width)
   if (!Number.isFinite(height)) {
-    console.log('[iframe-resize][parent] setSize ignored - invalid size', {
+    parentLogger.debug('setSize ignored - invalid size', {
       id,
       payload,
     })
     return
   }
 
-  console.log('[iframe-resize][parent] setSize', { id, height, width })
+  parentLogger.debug('setSize', { id, height, width })
   entry.iframe.style.height = `${height}px`
   if (entry.resizeWidth && Number.isFinite(width) && width > 0) {
     entry.iframe.style.width = `${width}px`
@@ -132,15 +139,17 @@ function setSize(id: string, payload: ResizePayload) {
 
 export function registerChildIframe(
   iframe: HTMLIFrameElement,
+  options: Required<IframeResizeOptions>,
 ): IframeResizeHandle {
+  parentLoggerState.enabled = parentLoggerState.enabled || options.log
   const id = iframe.getAttribute(IFRAME_RESIZE_ID_ATTR) || createIframeId()
   iframe.setAttribute(IFRAME_RESIZE_ID_ATTR, id)
   const resizeWidth =
     iframe.getAttribute(IFRAME_RESIZE_RESIZE_WIDTH_ATTR) === 'true'
-  const entry = { id, iframe, resizeWidth } as const
+  const entry = { id, iframe, resizeWidth, logEnabled: options.log } as const
   window.addEventListener(MESSAGE_EVENT, iframeListener)
   registry.set(id, entry)
-  console.log('[iframe-resize][parent] register iframe', {
+  parentLogger.info('register iframe', {
     id,
     domId: iframe.id,
     src: iframe.src,

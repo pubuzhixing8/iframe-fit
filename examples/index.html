@@ -43,7 +43,7 @@
       import { bootstrapIframeResize } from '../dist/parent/index.mjs'
 
       const iframe = document.querySelector('#iframeContainer iframe')
-      bootstrapIframeResize(iframe)
+      bootstrapIframeResize(iframe, { autoResize: true, log: true, })
 
       function toggle(event) {
         event.preventDefault()
