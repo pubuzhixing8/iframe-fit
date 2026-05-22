@@ -1,9 +1,9 @@
-import type { IframeFitOptions } from './options'
-import type { IframeFitRef } from './public'
+import type { IframeResizeOptions } from './options'
+import type { IframeResizeRef } from './public'
 
 export interface RegisteredIframe {
   id: string
   iframe: HTMLIFrameElement
-  options: Required<IframeFitOptions>
-  iframeFit: IframeFitRef
+  options: Required<IframeResizeOptions>
+  iframeResize: IframeResizeRef
 }

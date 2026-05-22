@@ -44,7 +44,7 @@
     <p id="callback"></p>
 
     <script type="module">
-      import { iframeFit } from '../../dist/parent/index.mjs'
+      import { setupIframeResize } from '../../dist/parent/index.mjs'
       import { bootstrapChild } from '../../dist/child/index.mjs'
 
       bootstrapChild()
@@ -56,7 +56,7 @@
       iframe.setAttribute('id', id)
       iframe.setAttribute('src', `frame.content.html?${level}`)
 
-      iframeFit(iframe)
+      setupIframeResize(iframe)
     </script>
   </body>
 </html>

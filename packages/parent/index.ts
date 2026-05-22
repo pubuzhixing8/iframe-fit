@@ -1,5 +1,5 @@
-export { iframeFit } from './iframe-fit'
-export type { IframeFitRef, IframeFitOptions } from '../common/index'
+export { setupIframeResize } from './setup-iframe-resize'
+export type { IframeResizeRef } from '../common/index'
 export * from './runtime/registry'
 export * from './runtime/settings'
 export * from './dispatcher/listener'

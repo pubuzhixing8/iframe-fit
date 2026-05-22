@@ -89,8 +89,8 @@ export function initChild(state: State) {
   // 对比旧版：legacy `applySelectors()` 会读取 child 侧已解析出的 `sizeSelector/ignoreSelector`，然后对匹配元素 toggle `data-iframe-size` / `data-iframe-ignore`。
   const applySelectors = () => {
     const config =
-      (window as unknown as { iframeFit?: unknown }).iframeFit ??
-      (window as unknown as { iframeFitChild?: unknown }).iframeFitChild ??
+      (window as unknown as { setupIframeResize?: unknown }).setupIframeResize ??
+      (window as unknown as { setupIframeResizeChild?: unknown }).setupIframeResizeChild ??
       {};
 
     const sizeSelector =

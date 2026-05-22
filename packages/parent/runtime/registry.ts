@@ -1,4 +1,4 @@
-import type { IframeFitRef, Envelope, InitPayload, ResizePayload } from '../../common/index'
+import type { Envelope, IframeResizeRef, InitPayload, ResizePayload } from '../../common/index'
 import {
   CHILD_READY_MESSAGE,
   createIframeId,
@@ -16,10 +16,10 @@ type RegistryEntry = Readonly<{
 
 const registry = new Map<string, RegistryEntry>()
 
-const IFRAME_FIT_ID_ATTR = 'data-iframe-fit-id'
-const IFRAME_FIT_RESIZE_WIDTH_ATTR = 'data-iframe-fit-resize-width'
+const IFRAME_RESIZE_ID_ATTR = 'data-iframe-resize-id'
+const IFRAME_RESIZE_RESIZE_WIDTH_ATTR = 'data-iframe-resize-resize-width'
 
-function setupIframeRef(iframe: HTMLIFrameElement): IframeFitRef {
+function setupIframeRef(iframe: HTMLIFrameElement): IframeResizeRef {
   return {
     sendMessage(message: unknown) {
       iframe.contentWindow?.postMessage(message, '*')
@@ -125,11 +125,11 @@ function setSize(id: string, payload: ResizePayload) {
   }
 }
 
-export function registerChildIframe(iframe: HTMLIFrameElement): IframeFitRef {
-  const id = iframe.getAttribute(IFRAME_FIT_ID_ATTR) || createIframeId()
-  iframe.setAttribute(IFRAME_FIT_ID_ATTR, id)
+export function registerChildIframe(iframe: HTMLIFrameElement): IframeResizeRef {
+  const id = iframe.getAttribute(IFRAME_RESIZE_ID_ATTR) || createIframeId()
+  iframe.setAttribute(IFRAME_RESIZE_ID_ATTR, id)
   const resizeWidth =
-    iframe.getAttribute(IFRAME_FIT_RESIZE_WIDTH_ATTR) === 'true'
+    iframe.getAttribute(IFRAME_RESIZE_RESIZE_WIDTH_ATTR) === 'true'
   const entry = { id, iframe, resizeWidth } as const
   window.addEventListener(MESSAGE_EVENT, iframeListener)
   registry.set(id, entry)

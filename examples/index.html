@@ -40,10 +40,10 @@
     </div>
 
     <script type="module">
-      import { iframeFit } from '../dist/parent/index.mjs'
+      import { setupIframeResize } from '../dist/parent/index.mjs'
 
       const iframe = document.querySelector('#iframeContainer iframe')
-      iframeFit(iframe)
+      setupIframeResize(iframe)
 
       function toggle(event) {
         event.preventDefault()

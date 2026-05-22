@@ -12,7 +12,7 @@ export type HeightCalculationMethod =
   | 'taggedElement'
   | 'custom'
 
-export interface IframeFitOptions {
+export interface IframeResizeOptions {
   autoResize?: boolean
   checkOrigin?: boolean | string[]
   heightCalculationMethod?: HeightCalculationMethod

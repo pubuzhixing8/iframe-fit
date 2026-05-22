@@ -1,8 +1,8 @@
-import type { IframeFitOptions } from '../../common/index'
+import type { IframeResizeOptions } from '../../common/index'
 
-export function normalizeIframeFitOptions(
-  options: IframeFitOptions = {},
-): Required<IframeFitOptions> {
+export function normalizeIframeResizeOptions(
+  options: IframeResizeOptions = {},
+): Required<IframeResizeOptions> {
   return {
     autoResize: options.autoResize ?? true,
     checkOrigin: options.checkOrigin ?? true,
