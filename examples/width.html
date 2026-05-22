@@ -41,10 +41,10 @@
     </div>
 
     <script type="module">
-      import { setupIframeResize } from '../dist/parent/index.mjs'
+      import { bootstrapIframeResize } from '../dist/parent/index.mjs'
 
       const iframe = document.querySelector('#iframeContainer iframe')
-      setupIframeResize(iframe)
+      bootstrapIframeResize(iframe)
 
       function toggle() {
         const iframes = document.querySelectorAll('iframe')

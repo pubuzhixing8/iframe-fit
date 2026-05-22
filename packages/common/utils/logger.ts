@@ -12,8 +12,8 @@ export function createLogger(enabled = false): Logger {
   }
 
   return {
-    debug: (...args) => console.debug('[iframe-fit]', ...args),
-    info: (...args) => console.info('[iframe-fit]', ...args),
-    warn: (...args) => console.warn('[iframe-fit]', ...args),
+    debug: (...args) => console.debug('[iframe-resize]', ...args),
+    info: (...args) => console.info('[iframe-resize]', ...args),
+    warn: (...args) => console.warn('[iframe-resize]', ...args),
   }
 }

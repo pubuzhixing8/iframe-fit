@@ -1,3 +1,3 @@
-export type { ParentIframe } from './parent-iframe'
-export { setupParentIframeHandle } from './parent-iframe'
+export type { ParentIframeHandle } from './parent-iframe-handle'
+export { buildParentIframeHandle } from './parent-iframe-handle'
 export { bootstrapChild } from './bootstrap-child'

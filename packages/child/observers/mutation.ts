@@ -1,4 +1,4 @@
-import { IGNORE_ATTR, IGNORE_TAGS, SIZE_ATTR } from '../dom-attrs'
+import { IGNORE_ATTR, IGNORE_TAGS, SIZE_ATTR } from '../constant'
 
 const DELAY = 16
 const DELAY_MARGIN = 2

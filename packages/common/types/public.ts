@@ -1,4 +1,4 @@
-export interface IframeResizeRef {
+export interface IframeResizeHandle {
   sendMessage(message: unknown, targetOrigin?: string): void
   autoResize(value: boolean): void
   close(): void

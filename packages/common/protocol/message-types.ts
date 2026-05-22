@@ -1,12 +1,12 @@
 export const MessageType = {
-  INIT: 'init',
-  RESIZE: 'resize',
-  MESSAGE: 'message',
-  CLOSE: 'close',
-  PARENT_INFO: 'parentInfo',
-  PAGE_INFO: 'pageInfo',
-  RESET: 'reset',
-  AUTO_RESIZE: 'autoResize',
+  init: 'init',
+  resize: 'resize',
+  message: 'message',
+  close: 'close',
+  parentInfo: 'parentInfo',
+  pageInfo: 'pageInfo',
+  reset: 'reset',
+  autoResize: 'autoResize',
 } as const
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType]

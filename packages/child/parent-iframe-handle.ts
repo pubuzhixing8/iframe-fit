@@ -1,8 +1,7 @@
 import { MessageType, createIframeId } from '../common/index'
-import type { MessageType as MessageKind } from '../common/index'
-import { sendToParent } from './send-to-parent'
+import { sendToParent } from './utils'
 
-export interface ParentIframe {
+export interface ParentIframeHandle {
   resize(): void
   sendMessage(message: unknown, targetOrigin?: string): void
   autoResize(value: boolean): void
@@ -12,7 +11,7 @@ export interface ParentIframe {
 
 declare global {
   interface Window {
-    parentIframe?: ParentIframe
+    parentIframeHandle?: ParentIframeHandle
     iframeChildListener?: (data: unknown) => void
   }
 }
@@ -21,35 +20,41 @@ declare global {
 // In the legacy runtime that function created `window.parentIframe` and wired
 // each method to the string-based message protocol. The new version keeps the
 // same public surface, but routes through typed message helpers instead.
-export function setupParentIframeHandle(): ParentIframe {
+export function buildParentIframeHandle(): ParentIframeHandle {
   const id = createIframeId('child')
 
-  const api: ParentIframe = {
+  const handle: ParentIframeHandle = {
     resize() {
       sendToParent({
-        message: { id, type: MessageType.RESIZE, payload: { reason: 'manual' } },
+        message: {
+          id,
+          type: MessageType.resize,
+          payload: { reason: 'manual' },
+        },
       })
     },
     sendMessage(message, targetOrigin) {
       sendToParent({
-        message: { id, type: MessageType.MESSAGE, payload: message },
+        message: { id, type: MessageType.message, payload: message },
         targetOrigin,
       })
     },
     autoResize(value) {
       sendToParent({
-        message: { id, type: MessageType.AUTO_RESIZE, payload: { value } },
+        message: { id, type: MessageType.autoResize, payload: { value } },
       })
     },
     close() {
-      sendToParent({ message: { id, type: MessageType.CLOSE, payload: null } })
+      sendToParent({ message: { id, type: MessageType.close, payload: null } })
     },
     getParentProps(callback) {
-      sendToParent({ message: { id, type: MessageType.PARENT_INFO, payload: null } })
+      sendToParent({
+        message: { id, type: MessageType.parentInfo, payload: null },
+      })
       return () => callback(undefined)
     },
   }
 
-  window.parentIframe = api
-  return api
+  window.parentIframeHandle = handle
+  return handle
 }
